@@ -69,7 +69,7 @@ class Importer(papis.importer.Importer):
 
     def fetch_from_doi(self, doi_str):
         doi_imp = papis.importer.get_importer_by_name('doi').match(doi_str)
-        if doi_imp is not None:
+        if doi_imp != None:
             self.logger.info('getting data through doi')
             doi_imp.fetch()
             return doi_imp.ctx
@@ -78,9 +78,9 @@ class Importer(papis.importer.Importer):
         # ignore the https warnings for scihub
         warnings.simplefilter('ignore')
         self.logger.warning(WARNING_NOTICE)
-        sh = scihub.SciHub(self.uri)
+        sh = scihub.SciHub()
         try:
-            ctx = sh.fetch()
+            ctx = sh.fetch(self.uri)
         except scihub.CaptchaNeededException as e:
             curl = e.captcha_url
             self.logger.warning(
@@ -101,9 +101,9 @@ class Importer(papis.importer.Importer):
             print(type(e))
             self.logger.error(e)
         else:
-            assert(ctx is not None)
-            assert(ctx.url is not None)
-            assert(ctx.pdf is not None)
+            assert(ctx != None)
+            assert(ctx.url != None)
+            assert(ctx.pdf != None)
             out = tempfile.mktemp(suffix='.pdf')
             self.logger.info('got file from: {0}'.format(ctx.url))
             self.logger.info('writing file in: {0}'.format(out))
